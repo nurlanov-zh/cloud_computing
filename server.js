@@ -1,6 +1,7 @@
 // require express and other modules
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
 // Express Body Parser
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -32,6 +33,15 @@ app.get('/', function homepage(req, res) {
  * JSON API Endpoints
  */
 
+const example_body = {
+  "title": "testTitle",
+  "author": "testAuthor",
+  "releaseDate": "20.10.2020",
+  "genre": "nonfiction",
+  "rating": 4,
+  "language": "testLanguage"
+};
+
 app.get('/api', (req, res) => {
   // TODO: Document all your api endpoints below as a simple hardcoded JSON object.
   res.json({
@@ -41,7 +51,10 @@ app.get('/api', (req, res) => {
     endpoints: [
       {method: 'GET', path: '/api', description: 'Describes all available endpoints'},
       {method: 'GET', path: '/api/profile', description: 'Data about me'},
-      {method: 'GET', path: '/api/books/', description: 'Get All books information'},
+      {method: 'GET', path: '/api/books/', description: 'Get all books information'},
+      {method: 'POST', path: '/api/books/', body: example_body,description: 'Creates a new book'},
+      {method: 'PUT', path: '/api/books/:id', body: example_body, description: 'Updates the book information'},
+      {method: 'DELETE', path: '/api/books/:id', description: 'Deletes the book information'}
       // TODO: Write other API end-points description here like above
     ]
   })
@@ -49,15 +62,14 @@ app.get('/api', (req, res) => {
 // TODO:  Fill the values
 app.get('/api/profile', (req, res) => {
   res.json({
-    'name': '',
-    'homeCountry': '',
-    'degreeProgram': '',//informatics or CSE.. etc
-    'email': '',
+    'name': 'Anna',
+    'homeCountry': 'USA',
+    'degreeProgram': 'CSE',//informatics or CSE.. etc
+    'email': 'anna@cse.com',
     'deployedURLLink': '',//leave this blank for the first exercise
     'apiDocumentationURL': '', //leave this also blank for the first exercise
     'currentCity': '',
     'hobbies': []
-
   })
 });
 /*
@@ -78,7 +90,7 @@ app.get('/api/books/', (req, res) => {
 /*
  * Add a book information into database
  */
-app.post('/api/books/', (req, res) => {
+app.post('/api/books/', async (req, res) => {
 
   /*
    * New Book information in req.body
@@ -109,11 +121,15 @@ app.put('/api/books/:id', (req, res) => {
   /*
    * TODO: use the books model and find using the bookId and update the book information
    */
+  db.books.findByIdAndUpdate(bookId,bookNewData, function (err, updatedBookInfo) {
+    if(err) throw err;
+    res.json(updatedBookInfo)
+  });
   /*
    * Send the updated book information as a JSON object
    */
-  var updatedBookInfo = {};
-  res.json(updatedBookInfo);
+  // var updatedBookInfo = {};
+  // res.json(updatedBookInfo);
 });
 /*
  * Delete a book based upon the specified ID
@@ -127,11 +143,13 @@ app.delete('/api/books/:id', (req, res) => {
    * TODO: use the books model and find using
    * the bookId and delete the book
    */
-  /*
-   * Send the deleted book information as a JSON object
-   */
-  var deletedBook = {};
-  res.json(deletedBook);
+  db.books.findByIdAndRemove(bookId, function (err, deletedBook) {
+    if (err) throw err;
+    /*
+     * Send the deleted book information as a JSON object
+     */
+    res.json(deletedBook);
+  });
 });
 
 
