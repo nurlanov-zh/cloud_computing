@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 // Express Body Parser
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -68,8 +69,8 @@ app.get('/api/profile', (req, res) => {
     'email': 'anna@cse.com',
     'deployedURLLink': '',//leave this blank for the first exercise
     'apiDocumentationURL': '', //leave this also blank for the first exercise
-    'currentCity': '',
-    'hobbies': []
+    'currentCity': 'New York',
+    'hobbies': ['internet surfing']
   })
 });
 /*
@@ -100,11 +101,16 @@ app.post('/api/books/', async (req, res) => {
    * TODO: use the books model and create a new object
    * with the information in req.body
    */
+  db.books.create(req.body, function (err, newBookInfo) {
+  if (err) throw err;
+  res.json(newBookInfo)
+  // saved!
+});
   /*
    * return the new book information object as json
    */
-  var newBook = {};
-  res.json(newBook);
+  // var newBook = {};
+  // res.json(newBook);
 });
 
 /*
