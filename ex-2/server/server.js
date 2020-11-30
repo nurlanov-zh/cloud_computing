@@ -39,6 +39,7 @@ app.get('/api', (req, res) => {
     baseUrl: '', //leave this blank for the first exercise
     endpoints: [
       {method: 'GET', path: '/api', description: 'Describes all available endpoints'},
+      {method: 'GET', path: '/api/exercise2', description: 'Exercise 2 check'},
       {method: 'GET', path: '/api/profile', description: 'Data about me'},
       {method: 'GET', path: '/api/books/', description: 'Get All books information'},
       {method: 'POST', path: '/api/books/', description: 'Insert a new book information'},
@@ -47,6 +48,9 @@ app.get('/api', (req, res) => {
       // TODO: Write other API end-points description here like above
     ]
   })
+});
+app.get('/api/exercise2', (req,res)=>{
+  res.json("group 19 application deployed using docker")
 });
 
 app.get('/api/profile', (req, res) => {
