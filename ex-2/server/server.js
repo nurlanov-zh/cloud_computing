@@ -49,8 +49,9 @@ app.get('/api', (req, res) => {
     ]
   })
 });
+
 app.get('/api/exercise2', (req,res)=>{
-  res.json("group 19 application deployed using docker")
+  res.send("group 19 application deployed using docker")
 });
 
 app.get('/api/profile', (req, res) => {
